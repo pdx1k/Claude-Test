@@ -89,17 +89,14 @@ function updateLoop() {
 }
 
 export async function initMotion() {
-  // Try to request device orientation permission (iOS 13+)
+  // Request permissions (iOS 13+ requires user gesture)
   if (typeof DeviceOrientationEvent !== 'undefined' &&
       typeof DeviceOrientationEvent.requestPermission === 'function') {
     try {
       const perm = await DeviceOrientationEvent.requestPermission();
-      hasMotionPermission = perm === 'granted';
-    } catch {
-      hasMotionPermission = false;
-    }
+      if (perm === 'granted') hasMotionPermission = true;
+    } catch { /* denied or error */ }
   } else if (typeof DeviceOrientationEvent !== 'undefined') {
-    // Android / non-iOS — access is automatic
     hasMotionPermission = true;
   }
 
@@ -107,18 +104,28 @@ export async function initMotion() {
       typeof DeviceMotionEvent.requestPermission === 'function') {
     try {
       await DeviceMotionEvent.requestPermission();
-    } catch { /* ignore */ }
+    } catch { /* denied or error */ }
   }
 
-  if (hasMotionPermission) {
-    window.addEventListener('deviceorientation', handleOrientation, { passive: true });
-    window.addEventListener('devicemotion', handleMotion, { passive: true });
-  }
+  // Always attach listeners — on non-iOS they work without permission,
+  // and on iOS they'll fire if permission was granted above
+  window.addEventListener('deviceorientation', handleOrientation, { passive: true });
+  window.addEventListener('devicemotion', handleMotion, { passive: true });
 
-  // Always set up mouse fallback (works on desktop, supplements mobile)
+  // Mouse fallback for desktop
   window.addEventListener('mousemove', handleMouse, { passive: true });
   window.addEventListener('mousedown', handleMouseShake);
   window.addEventListener('contextmenu', e => e.preventDefault());
+
+  // Touch fallback — use touch position like mouse
+  window.addEventListener('touchmove', (e) => {
+    const touch = e.touches[0];
+    if (touch) {
+      targetX = touch.clientX / window.innerWidth;
+      targetY = touch.clientY / window.innerHeight;
+      targetRotation = (targetX - 0.5) * 2;
+    }
+  }, { passive: true });
 
   // Start smooth update loop
   updateLoop();

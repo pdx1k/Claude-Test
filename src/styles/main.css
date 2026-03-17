@@ -121,8 +121,8 @@ html, body {
 /* Motion Display */
 #motion-display {
   position: fixed;
-  top: 60px;
-  right: 12px;
+  bottom: 60px;
+  left: 12px;
   width: 48px;
   height: 48px;
   border-radius: 50%;
