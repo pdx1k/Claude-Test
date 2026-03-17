@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>ÆTHER</title>
+  <link rel="stylesheet" href="/src/styles/main.css" />
+</head>
+<body>
+  <!-- Landing Screen -->
+  <div id="landing">
+    <div class="landing-content">
+      <h1 class="landing-title">ÆTHER</h1>
+      <p class="landing-subtitle">motion-controlled algorithmic sound playground</p>
+      <button id="enter-btn">Enter</button>
+      <p class="landing-hint">Tap pads. Tilt your device. Write code. Make music.</p>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div id="app" class="hidden">
+    <!-- Visualizer Canvas (background) -->
+    <canvas id="viz-canvas"></canvas>
+
+    <!-- Motion Display -->
+    <div id="motion-display">
+      <div id="motion-orb"></div>
+    </div>
+
+    <!-- Top Bar -->
+    <div id="top-bar">
+      <span class="logo">ÆTHER</span>
+      <div id="transport">
+        <button id="play-btn" class="transport-btn" title="Play/Stop">&#9654;</button>
+        <div class="tempo-control">
+          <label>BPM</label>
+          <input type="range" id="tempo-slider" min="60" max="200" value="120" />
+          <span id="tempo-value">120</span>
+        </div>
+      </div>
+      <div id="mode-toggles">
+        <button id="mode-pads" class="mode-btn active" data-mode="pads">Pads</button>
+        <button id="mode-seq" class="mode-btn" data-mode="sequencer">Sequencer</button>
+        <button id="mode-code" class="mode-btn" data-mode="code">Code</button>
+      </div>
+      <div id="viz-toggle">
+        <button id="viz-mode-btn" class="viz-btn" title="Cycle visualizer">&#10022;</button>
+      </div>
+    </div>
+
+    <!-- Pad Grid -->
+    <div id="pad-container" class="panel">
+      <div id="pad-grid"></div>
+    </div>
+
+    <!-- Step Sequencer -->
+    <div id="seq-container" class="panel hidden">
+      <div id="seq-controls">
+        <div class="seq-row-controls" id="seq-row-controls"></div>
+      </div>
+      <div id="seq-grid"></div>
+      <div id="seq-presets">
+        <button class="preset-btn" data-preset="basic">Basic</button>
+        <button class="preset-btn" data-preset="euclidean">Euclidean</button>
+        <button class="preset-btn" data-preset="polyrhythm">Polyrhythm</button>
+      </div>
+    </div>
+
+    <!-- Code Editor -->
+    <div id="code-container" class="panel hidden">
+      <div id="code-header">
+        <span>Live Pattern Editor</span>
+        <div id="code-presets">
+          <button class="code-preset-btn" data-preset="minimal">Minimal</button>
+          <button class="code-preset-btn" data-preset="techno">Techno</button>
+          <button class="code-preset-btn" data-preset="ambient">Ambient</button>
+          <button class="code-preset-btn" data-preset="motion">Motion</button>
+        </div>
+      </div>
+      <textarea id="code-editor" spellcheck="false" placeholder='// Type a pattern, e.g.:&#10;"bd sd _ hh".speed(1)'></textarea>
+      <div id="code-status"></div>
+    </div>
+
+    <!-- Volume -->
+    <div id="volume-control">
+      <label>&#128265;</label>
+      <input type="range" id="volume-slider" min="0" max="100" value="75" />
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
